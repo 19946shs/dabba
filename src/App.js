@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import aws from 'aws-sdk';
 
 function App() {
   return (
