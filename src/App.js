@@ -53,18 +53,16 @@ function App() {
     setDragActive(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const files = [...e.dataTransfer.files]
-      axios.get('http://54.219.221.121:8080/s3Url')
-      .then((resp) => {
-          const s3URL = resp.data.url
-          console.log('Debug FIddy :: ', files, s3URL);
-          if(files.length) {
-            axios.put(s3URL, files, {
-              headers: {
-                "Content-Type": "multipart/form-data"
-              }
-            })
+      files.forEach(async (file) => {
+        const {data} = await axios.get('http://localhost:8080/s3Url')
+        const s3URL = data.url
+        axios.put(s3URL, file, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": 'no-cache'
           }
         })
+      })
     }
   };
   
@@ -72,7 +70,6 @@ function App() {
   const handleChange = function(e) {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
-      console.log('Debug FIddy :: ', e.target.files);
           // handleFiles(e.target.files);
     }
   };
